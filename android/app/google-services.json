@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "559132969368",
+    "project_id": "sampe-cab22",
+    "storage_bucket": "sampe-cab22.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559132969368:android:b2185575be867896ea83ed",
+        "android_client_info": {
+          "package_name": "com.example.fudo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559132969368-3n7gfagjs8nf3k79jdmnp67p1jkad106.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fudo",
+            "certificate_hash": "c9350815471096ecefab3372a756678bfee85685"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD68Jd1mPmXvShLHzPjzBUp6NyBSNSMuk4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
