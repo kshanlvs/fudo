@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fudo/src/core/features/auth/service/login_service.dart';
 import 'package:fudo/src/core/features/auth/service/registeration_service.dart';
 import 'package:fudo/src/core/router/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 
 Future<void> main() async {
@@ -16,7 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
     await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
     FirebaseAuth.instance.setLanguageCode('en');
-  await dotenv.load();
+  await ndotenv.load();
   runApp(MultiProvider(
     providers: providers,
     child: const MyApp()));
