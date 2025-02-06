@@ -1,19 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:fudo/src/core/features/auth/screens/login_screen.dart';
 import 'package:fudo/src/core/features/auth/screens/user_registration.dart';
 import 'package:fudo/src/core/features/auth/screens/verify_otp_screen.dart';
 import 'package:fudo/src/core/features/dashboard/screens/home_screen.dart';
 import 'package:fudo/src/core/router/route_location.dart';
+import 'package:fudo/src/utils.dart/splash_screen.dart';
+import 'package:fudo/src/utils.dart/token_storage.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../utils.dart/token_storage.dart';
-import '../features/auth/screens/login_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
+  
+    
     initialLocation: '/',
+  
     redirect: (context, state) async {
-      // Check if the user is logged in
       final isLoggedIn = await TokenStorage.instance.isLoggedIn();
-        if (state.fullPath == RouteLocation.register || state.fullPath == RouteLocation.loginScreen) {
+      if (state.fullPath == RouteLocation.register || state.fullPath == RouteLocation.loginScreen) {
         return null; // Don't apply any redirection for registration and login
       }
 
@@ -25,8 +28,13 @@ class AppRouter {
         return '/login';
       }
     },
+    
     routes: [
-        GoRoute(
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const SplashScreen(),  // Set Splash Screen as the initial route
+      ),
+      GoRoute(
         path: '/registration-page',
         builder: (context, state) => const RegistrationForm(),
       ),
@@ -40,9 +48,24 @@ class AppRouter {
       ),
       GoRoute(
         path: '/home-page',
-        builder: (context, state) => const HomeScreen(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+        child: const HomePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
       ),
-    
+      ),
     ],
+    
   );
+  
 }
