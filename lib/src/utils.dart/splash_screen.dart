@@ -14,6 +14,7 @@ class SplashScreen extends StatelessWidget {
       final isLoggedIn = await TokenStorage.instance.isLoggedIn();
       // Navigate based on login status
       if   (context.mounted &&   isLoggedIn) {
+        
         // Navigate to Home Screen if logged in
         context.go('/home-page');
       } else {

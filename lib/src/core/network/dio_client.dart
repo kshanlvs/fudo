@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import '../../utils.dart/token_storage.dart';
 import 'api_constants.dart';
 
 class DioClient {
@@ -8,29 +9,32 @@ class DioClient {
   DioClient(this._dio) {
     // Add Interceptors
     _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // You can add authentication headers or logging here
+      onRequest: (options, handler) async {
+        String? token = await TokenStorage.instance.getToken();
+        options.followRedirects = true;
+
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+          debugPrint(token);
+        }
+
         if (kDebugMode) {
           print('endpoint: ${options.path}');
           print('Request: ${options.method} ${options.path}');
         }
-        // For example, adding Authorization header if needed
-        // options.headers['Authorization'] = 'Bearer YOUR_TOKEN_HERE';
-        return handler.next(options); // Continue with request
+        return handler.next(options);
       },
       onResponse: (response, handler) {
-        // You can log or handle response here
         if (kDebugMode) {
           print('Response: ${response.statusCode} ${response.data}');
         }
-        return handler.next(response); // Continue with response
+        return handler.next(response);
       },
       onError: (DioException e, handler) {
-        // Handle any error responses here
         if (kDebugMode) {
           print('Error: ${e.message}');
         }
-        return handler.next(e); // Continue with error
+        return handler.next(e);
       },
     ));
   }
@@ -43,7 +47,7 @@ class DioClient {
         queryParameters: queryParams,
       );
     } on DioException {
-      rethrow; // Handle exception
+      rethrow;
     }
   }
 
@@ -55,7 +59,31 @@ class DioClient {
         data: data,
       );
     } on DioException {
-      rethrow; // Handle exception
+      rethrow;
+    }
+  }
+
+  // DELETE request
+  Future<Response> delete(String path, {Map<String, dynamic>? data}) async {
+    try {
+      return await _dio.delete(
+        '${ApiEndpoints.baseUrl}/$path',
+        data: data,
+      );
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  // PUT request
+  Future<Response> put(String path, {Map<String, dynamic>? data}) async {
+    try {
+      return await _dio.put(
+        '${ApiEndpoints.baseUrl}/$path',
+        data: data,
+      );
+    } on DioException {
+      rethrow;
     }
   }
 }

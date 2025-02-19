@@ -3,6 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
+
+Future<void> signInAnonymously() async {
+  try {
+    await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in anonymously");
+  } catch (e) {
+    print("Anonymous sign-in failed: $e");
+  }
+}
   // Send OTP
   Future<void> sendOTP({
     required String phoneNumber,

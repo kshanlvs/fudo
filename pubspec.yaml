@@ -44,6 +44,11 @@ dependencies:
   firebase_phone_auth_handler: ^1.1.0+1
   confetti: ^0.8.0
   flutter_secure_storage: ^9.2.4
+  shimmer: ^3.0.0
+  cached_network_image: ^3.4.1
+  firebase_storage: ^12.4.2
+  firebase_app_check: ^0.3.2+2
+ 
 
 dev_dependencies:
   flutter_test:

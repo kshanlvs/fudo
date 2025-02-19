@@ -1,33 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fudo/src/core/features/auth/service/login_service.dart';
+import 'package:fudo/src/core/features/auth/service/profile_service.dart';
 import 'package:fudo/src/core/features/auth/service/registeration_service.dart';
+import 'package:fudo/src/core/features/product/services/cart_service.dart';
+import 'package:fudo/src/core/features/product/services/product_services.dart';
 import 'package:fudo/src/core/router/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 Future<void> main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-  
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-    await FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
-    FirebaseAuth.instance.setLanguageCode('en');
+  await FirebaseAuth.instance
+      .setSettings(appVerificationDisabledForTesting: true);
+  FirebaseAuth.instance.setLanguageCode('en');
+  // AuthService().signInAnonymously();
+  await FirebaseAppCheck.instance.activate();
   await ndotenv.load();
-  runApp(MultiProvider(
-    providers: providers,
-    child: const MyApp()));
+  runApp(MultiProvider(providers: providers, child: const MyApp()));
 }
 
 List<SingleChildWidget> get providers {
   return [
     ChangeNotifierProvider(create: (_) => RegisterationService()),
     ChangeNotifierProvider(create: (_) => LoginService()),
-
+    ChangeNotifierProvider(create: (_) => ProductService()),
+    ChangeNotifierProvider(create: (_) => ProfileService()),
+    ChangeNotifierProvider(create: (_) => CartService()),
 
   ];
 }
@@ -38,11 +43,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
         scaffoldBackgroundColor: Colors.white,
         // Define the color scheme for the app
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -51,10 +55,8 @@ class MyApp extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius:
-                BorderRadius.circular(10),
-            borderSide: const BorderSide(
-                color: Colors.grey, width: .5),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Colors.grey, width: .5),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -62,19 +64,16 @@ class MyApp extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-                color: Colors.grey, width: 1),
+            borderSide: const BorderSide(color: Colors.grey, width: 1),
           ),
-          labelStyle:
-              const TextStyle(color: Colors.black),
+          labelStyle: const TextStyle(color: Colors.black),
           prefixIconColor: Colors.grey,
           suffixIconColor: Colors.grey,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
-            backgroundColor:
-                const Color(0xFFf66428),
+            backgroundColor: const Color(0xFFf66428),
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -86,7 +85,6 @@ class MyApp extends StatelessWidget {
           size: 24,
         ),
       ),
-      
       routerConfig: AppRouter.router,
     );
   }
